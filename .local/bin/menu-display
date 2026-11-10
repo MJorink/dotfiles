@@ -1,0 +1,49 @@
+#!/bin/sh
+# HDMI-A-1: mirror / extend right / off, with wlr-randr only (no daemon).
+# Mirror puts HDMI-A-1 at eDP-1's position with the same logical size;
+# dwl's mirror patch then treats it as a copy of eDP-1.
+
+int=eDP-1 ext=HDMI-A-2
+
+choice=$(printf '%s\n' "󰍺  Mirror" "󰍹  Extend right" "󰶐  Off" |
+	bemenu --vim-normal-mode -p "$ext ") || exit 0
+
+fail() { notify-send -u critical "Display" "$*"; exit 1; }
+
+json=$(wlr-randr --json) || fail "wlr-randr failed"
+echo "$json" | jq -e --arg o "$ext" 'any(.[]; .name == $o)' >/dev/null ||
+	fail "$ext is not connected"
+
+# logical (scaled) size of eDP-1 and the current or preferred mode of a display
+lw=$(echo "$json" | jq -r --arg o "$int" '.[] | select(.name == $o) |
+	(.modes[] | select(.current)) as $m | ($m.width / .scale | floor)')
+mode() {
+	echo "$json" | jq -r --arg o "$1" '.[] | select(.name == $o) |
+		((.modes[] | select(.current)) // (.modes[] | select(.preferred)) // .modes[0]) |
+		"\(.width)x\(.height)"' | head -n1
+}
+
+case $choice in
+*Mirror)
+	# Prefer eDP-1's resolution on HDMI-A-1 at scale 1; otherwise use the
+	# HDMI preferred mode scaled down to eDP-1's logical width.
+	imode=$(mode "$int")
+	if echo "$json" | jq -e --arg o "$ext" --arg m "$imode" '.[] | select(.name == $o) |
+		any(.modes[]; "\(.width)x\(.height)" == $m)' >/dev/null; then
+		wlr-randr --output "$ext" --on --mode "$imode" --scale 1 --pos 0,0 || fail "mirror failed"
+	else
+		pmode=$(echo "$json" | jq -r --arg o "$ext" '.[] | select(.name == $o) |
+			((.modes[] | select(.preferred)) // .modes[0]) | "\(.width)x\(.height)"' | head -n1)
+		scale=$(awk -v w="${pmode%x*}" -v l="$lw" 'BEGIN { printf "%.4f", w / l }')
+		wlr-randr --output "$ext" --on --mode "$pmode" --scale "$scale" --pos 0,0 || fail "mirror failed"
+	fi
+	msg="mirroring $int" ;;
+*Extend*)
+	wlr-randr --output "$ext" --on --preferred --scale 1 --pos "$lw,0" || fail "extend failed"
+	msg="extended to the right" ;;
+*Off)
+	wlr-randr --output "$ext" --off || fail "off failed"
+	msg="off" ;;
+*) exit 0 ;;
+esac
+notify-send "Display" "$ext: $msg"

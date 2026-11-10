@@ -1,0 +1,16 @@
+#!/bin/sh
+# MOD+s: system menu. TUIs open in footclient; the preferred tool is used
+# when installed, else the fallback from the base system.
+
+pick() { command -v "$1" >/dev/null 2>&1 && echo "$1" || echo "$2"; }
+
+choice=$(printf '%s\n' "󰖩  Wi-Fi" "󰕾  Audio" "󰂯  Bluetooth" "󰍹  Display" "󰄀  Screenshot" |
+	bemenu --vim-normal-mode -p "system ") || exit 0
+
+case $choice in
+*Wi-Fi)     exec footclient -T Wi-Fi "$(pick impala iwctl)" ;;
+*Audio)     exec footclient -T Audio sh -c "$(pick wiremix pulsemixer); volume refresh" ;;
+*Bluetooth) exec footclient -T Bluetooth "$(pick bluetui bluetoothctl)" ;;
+*Display)   exec menu-display ;;
+*Screenshot) exec menu-screenshot ;;
+esac

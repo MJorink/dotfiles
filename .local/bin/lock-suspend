@@ -1,0 +1,9 @@
+#!/bin/sh
+# MOD+CTRL+p: lock, then suspend to RAM.
+# systemd (NixOS): swayidle's before-sleep locks first (see idle); the doas
+# rule allows "systemctl suspend". Alpine: desktop-suspend locks, then suspends.
+if command -v systemctl >/dev/null; then
+	doas -n systemctl suspend
+else
+	doas -n /usr/local/sbin/desktop-suspend
+fi || notify-send -u critical "Suspend failed" "Is the doas rule for suspend installed?"

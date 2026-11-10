@@ -1,0 +1,21 @@
+# swaylock: plain lock screen in caelus colours
+color=0f0f0f
+ignore-empty-password
+show-failed-attempts
+font=JetBrainsMonoNL Nerd Font Mono
+inside-color=0f0f0f
+ring-color=1e1f1e
+key-hl-color=ef934d
+bs-hl-color=f16e65
+line-color=00000000
+separator-color=00000000
+text-color=f4decd
+inside-ver-color=0f0f0f
+ring-ver-color=ef934d
+text-ver-color=f4decd
+inside-wrong-color=0f0f0f
+ring-wrong-color=f16e65
+text-wrong-color=f16e65
+inside-clear-color=0f0f0f
+ring-clear-color=a69d8b
+text-clear-color=f4decd

@@ -1,0 +1,15 @@
+#!/bin/sh
+# Started by ~/.profile on tty1 inside dbus-run-session, with XDG_RUNTIME_DIR set.
+# slstatus writes the status text to dwl's stdin (bar patch). It runs in
+# $XDG_RUNTIME_DIR so its "cat volume" component reads $XDG_RUNTIME_DIR/volume.
+
+export XDG_CURRENT_DESKTOP=dwl
+export XDG_SESSION_TYPE=wayland
+export MOZ_ENABLE_WAYLAND=1
+# Keyboard layout for dwl (XKB_DEFAULT_LAYOUT, XKB_DEFAULT_VARIANT, ...):
+# export XKB_DEFAULT_LAYOUT=us
+
+cd "$HOME" || exit 1
+# stderr: slstatus warns every interval when a battery (e.g. BAT1) is absent
+(cd "$XDG_RUNTIME_DIR" && exec slstatus -s 2>/dev/null) |
+	dwl -s "$HOME/.config/dwl/autostart.sh" 2>"$XDG_RUNTIME_DIR/dwl.log"

@@ -1,0 +1,54 @@
+#!/bin/sh
+# brightness up|down|refresh|restore
+# Steps the backlight in 5% increments (38% -> up 40, down 35), then writes
+# "<icon> NN%" to $XDG_RUNTIME_DIR/brightness and the bar tooltip
+# ("Backlight <device>, N of M") to $XDG_RUNTIME_DIR/brightness-info, and tells
+# slstatus to redraw now (SIGUSR1).
+# The level is saved to $XDG_STATE_HOME/brightness; "restore" (run from
+# autostart) sets it back after a reboot. refresh snaps an off-step level.
+
+state=${XDG_STATE_HOME:-$HOME/.local/state}/brightness
+
+# "intel_backlight,backlight,854,13%,6818"
+read_dev() {
+	out=$(brightnessctl -m -c backlight) || exit 1
+	IFS=, read -r dev _ cur _ max <<-EOF
+	$out
+	EOF
+	pct=$(((cur * 100 + max / 2) / max))   # nearest whole percent
+}
+
+read_dev
+case ${1:-refresh} in
+up)      t=$((pct / 5 * 5 + 5)) ;;
+down)    t=$(((pct + 4) / 5 * 5 - 5)) ;;
+refresh) t=$(((pct + 2) / 5 * 5)) ;;
+restore)
+	t=$(cat "$state" 2>/dev/null)
+	case $t in ''|*[!0-9]*) t=$(((pct + 2) / 5 * 5)) ;; esac ;;
+*) echo "usage: brightness up|down|refresh|restore" >&2; exit 2 ;;
+esac
+[ $t -gt 100 ] && t=100
+[ $t -lt 0 ] && t=0
+
+if [ $t -ne $pct ] || [ "$1" = restore ]; then
+	raw=$(((t * max + 50) / 100))
+	[ $raw -lt 1 ] && raw=1   # 0% is dim, never off
+	brightnessctl -q set "$raw"
+	read_dev
+fi
+mkdir -p "${state%/*}" && echo $pct > "$state"
+
+if [ $pct -lt 34 ]; then
+	text="󰃞 $pct%"
+elif [ $pct -lt 67 ]; then
+	text="󰃟 $pct%"
+else
+	text="󰃠 $pct%"
+fi
+
+write() { printf '%s\n' "$2" > "$XDG_RUNTIME_DIR/$1.tmp" && mv "$XDG_RUNTIME_DIR/$1.tmp" "$XDG_RUNTIME_DIR/$1"; }
+write brightness "$text"
+write brightness-info "Backlight $dev, $cur of $max"
+pkill -USR1 -x slstatus
+exit 0

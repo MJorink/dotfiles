@@ -1,0 +1,66 @@
+#!/bin/sh
+# volume up|down|mute|micmute|refresh
+# Steps the volume in 5% increments with wpctl (38% -> up 40, down 35), then
+# writes "<icon> NN%" to $XDG_RUNTIME_DIR/volume and the bar tooltip
+# ("<output device>, mic on") to $XDG_RUNTIME_DIR/volume-info, and tells
+# slstatus to redraw now (SIGUSR1). refresh snaps an off-step level (set by a
+# mixer, or restored by WirePlumber at login) to the nearest 5%.
+
+sink=@DEFAULT_AUDIO_SINK@
+source=@DEFAULT_AUDIO_SOURCE@
+
+# "Volume: 0.45" or "Volume: 0.45 [MUTED]"
+read_vol() {
+	out=$(wpctl get-volume "$sink") || exit 1
+	set -- $out
+	int=${2%.*} frac=${2#*.}
+	frac=${frac#0}   # "05" would be read as octal
+	pct=$((int * 100 + ${frac:-0}))
+	muted=${3:-}
+}
+
+read_vol
+t=
+case ${1:-refresh} in
+up)
+	t=$((pct / 5 * 5 + 5))
+	[ $t -gt 100 ] && t=$((pct > 100 ? pct : 100)) ;;   # don't lower a mixer boost
+down)    t=$(((pct + 4) / 5 * 5 - 5)) ;;
+refresh) t=$(((pct + 2) / 5 * 5)) ;;
+mute)    wpctl set-mute "$sink" toggle && read_vol ;;
+micmute)
+	wpctl set-mute "$source" toggle || exit 1
+	case $(wpctl get-volume "$source") in
+	*MUTED*) notify-send -u low -t 1500 "󰍭  Microphone muted" ;;
+	*)       notify-send -u low -t 1500 "󰍬  Microphone on" ;;
+	esac ;;
+*) echo "usage: volume up|down|mute|micmute|refresh" >&2; exit 2 ;;
+esac
+[ -n "$t" ] && [ $t -lt 0 ] && t=0
+if [ -n "$t" ] && [ $t -ne $pct ]; then
+	wpctl set-volume "$sink" "$t%" && read_vol
+fi
+
+if [ "$muted" = "[MUTED]" ]; then
+	text="󰖁 mute"
+elif [ $pct -eq 0 ]; then
+	text="󰕿 0%"
+elif [ $pct -lt 50 ]; then
+	text="󰖀 $pct%"
+else
+	text="󰕾 $pct%"
+fi
+
+# Tooltip: output device name and microphone state
+dev=$(wpctl inspect "$sink" | sed -n 's/.*node\.description = "\(.*\)"/\1/p' | head -n1)
+case $(wpctl get-volume "$source" 2>/dev/null) in
+"")      mic="no microphone" ;;
+*MUTED*) mic="mic muted" ;;
+*)       mic="mic on" ;;
+esac
+
+write() { printf '%s\n' "$2" > "$XDG_RUNTIME_DIR/$1.tmp" && mv "$XDG_RUNTIME_DIR/$1.tmp" "$XDG_RUNTIME_DIR/$1"; }
+write volume "$text"
+write volume-info "${dev:-unknown output}, $mic"
+pkill -USR1 -x slstatus
+exit 0

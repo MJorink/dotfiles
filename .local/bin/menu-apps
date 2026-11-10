@@ -1,0 +1,42 @@
+#!/bin/sh
+# MOD+space: application menu from .desktop files (what tofi-drun did).
+# A file in ~/.local/share/applications hides a system one with the same name.
+# Terminal=true apps open in footclient.
+
+# user first, so it wins; BusyBox awk stops at a missing file, so skip those
+set --
+for f in "${XDG_DATA_HOME:-$HOME/.local/share}"/applications/*.desktop \
+	/usr/local/share/applications/*.desktop /usr/share/applications/*.desktop; do
+	[ -f "$f" ] && set -- "$@" "$f"
+done
+[ $# -gt 0 ] || exit 0
+
+apps=$(awk '
+	FNR == 1 { flush(); f = FILENAME; sub(/.*\//, "", f); sec = 0
+		name = exec = ""; term = hide = 0; type = "" }
+	/^\[/ { sec = ($0 == "[Desktop Entry]"); next }
+	!sec { next }
+	/^Name=/     && name == "" { name = substr($0, 6) }
+	/^Exec=/     && exec == "" { exec = substr($0, 6) }
+	/^Type=/     { type = substr($0, 6) }
+	/^Terminal=true/ { term = 1 }
+	/^(NoDisplay|Hidden)=true/ { hide = 1 }
+	function flush() {
+		if (f == "" || seen[f]++) return
+		if (type != "Application" || hide || name == "" || exec == "") return
+		gsub(/%[fFuUdDnNickvm]/, "", exec); gsub(/%%/, "%", exec)
+		print name "\t" term "\t" exec
+	}
+	END { flush() }
+' "$@")
+
+choice=$(printf '%s\n' "$apps" | cut -f1 | sort -fu |
+	bemenu --vim-normal-mode -p "run ") || exit 0
+
+line=$(printf '%s\n' "$apps" | awk -F '\t' -v n="$choice" '$1 == n { print; exit }')
+[ -n "$line" ] || exit 0
+cmd=$(printf '%s\n' "$line" | cut -f3)
+if [ "$(printf '%s\n' "$line" | cut -f2)" = 1 ]; then
+	exec footclient sh -c "exec $cmd"
+fi
+exec sh -c "exec $cmd"

@@ -1,0 +1,27 @@
+#!/bin/sh
+# swayidle with the session's timeouts: lock after 5 min, outputs off after
+# 10 min. "idle start" runs it (autostart.sh); "idle toggle" (session menu)
+# stops it to keep the screen on, or starts it again. A swayidle started by
+# toggle is outside dwl's startup process group, but it exits with dwl anyway
+# when its Wayland connection closes.
+# With logind (NixOS) it also locks before every suspend, including lid close.
+
+start() {
+	command -v systemctl >/dev/null && set -- before-sleep lock
+	exec swayidle -w \
+		timeout 300 'lock' \
+		timeout 600 'wlopm --off "*"' resume 'wlopm --on "*"' "$@"
+}
+
+case $1 in
+start) start ;;
+toggle)
+	if pkill -x -u "$(id -u)" swayidle; then
+		notify-send -t 3000 "Idle paused" "No auto-lock or screen-off until resumed"
+	else
+		notify-send -t 3000 "Idle resumed"
+		start >/dev/null 2>&1
+	fi ;;
+status) pgrep -x -u "$(id -u)" swayidle >/dev/null ;;
+*) echo "usage: idle start|toggle|status" >&2; exit 1 ;;
+esac

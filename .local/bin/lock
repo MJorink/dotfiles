@@ -1,0 +1,4 @@
+#!/bin/sh
+# MOD+SHIFT+p and swayidle: lock the session (does nothing if already locked).
+# -f: swaylock forks only once the screen is locked.
+pgrep -x -u "$(id -u)" swaylock >/dev/null || exec swaylock -f

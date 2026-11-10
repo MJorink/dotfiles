@@ -1,0 +1,5 @@
+#!/bin/sh
+# MOD+v: pick an entry from the clipboard history and copy it again.
+sel=$(cliphist list | bemenu --vim-normal-mode -p "clipboard ") || exit 0
+[ -n "$sel" ] || exit 0
+printf '%s\n' "$sel" | cliphist decode | wl-copy

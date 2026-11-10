@@ -1,0 +1,8 @@
+[user]
+	name = Jorink
+	email = maxjorink@gmail.com
+[credential]
+	# kept in a directory: on NixOS $HOME is wiped at boot, ~/.local/state is kept
+	helper = store --file ~/.local/state/git-credentials
+[init]
+	defaultBranch = main
