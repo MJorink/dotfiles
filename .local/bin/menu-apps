@@ -3,12 +3,19 @@
 # A file in ~/.local/share/applications hides a system one with the same name.
 # Terminal=true apps open in footclient.
 
-# user first, so it wins; BusyBox awk stops at a missing file, so skip those
+# user first, then $XDG_DATA_DIRS in order (NixOS keeps apps under
+# /run/current-system/sw/share, not /usr/share), so earlier dirs win.
+# BusyBox awk stops at a missing file, so skip those.
 set --
-for f in "${XDG_DATA_HOME:-$HOME/.local/share}"/applications/*.desktop \
-	/usr/local/share/applications/*.desktop /usr/share/applications/*.desktop; do
-	[ -f "$f" ] && set -- "$@" "$f"
+dirs="${XDG_DATA_HOME:-$HOME/.local/share}:${XDG_DATA_DIRS:-/usr/local/share:/usr/share}"
+oldifs=$IFS; IFS=:
+for d in $dirs; do
+	IFS=$oldifs
+	for f in "$d"/applications/*.desktop; do
+		[ -f "$f" ] && set -- "$@" "$f"
+	done
 done
+IFS=$oldifs
 [ $# -gt 0 ] || exit 0
 
 apps=$(awk '
