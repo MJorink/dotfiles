@@ -68,7 +68,13 @@ vim.lsp.config('lua_ls', {
 		Lua = { diagnostics = { globals = { 'vim' } }, telemetry = { enable = false } },
 	},
 })
-vim.lsp.enable({ 'clangd', 'csharp_ls', 'lua_ls' })
+vim.lsp.config('nil_ls', {
+	cmd = { 'nil' },
+	filetypes = { 'nix' },
+	root_markers = { 'flake.nix', '.git' },
+	settings = { ['nil'] = { formatting = { command = { 'nixfmt' } } } },
+})
+vim.lsp.enable({ 'clangd', 'csharp_ls', 'lua_ls', 'nil_ls' })
 
 vim.api.nvim_create_autocmd('LspAttach', {
 	callback = function(ev)
