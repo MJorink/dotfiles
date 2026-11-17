@@ -14,12 +14,13 @@ export LIBVA_DRIVER_NAME=iHD         # VA-API driver for the HD 620
 # Claude Code then keeps .claude.json inside ~/.claude: one directory holds all its state
 export CLAUDE_CONFIG_DIR="$HOME/.claude"
 
-# bemenu (app launcher and menu-* scripts): vim bindings, caelus colours.
+# bemenu (app launcher and menu-* scripts): vim bindings, caelus colours
+# (translucent backgrounds show dwl's glass; -R 8 matches its corner_radius).
 # The menu-* scripts (menu-apps too) add --vim-normal-mode.
-export BEMENU_OPTS="--binding vim --vim-esc-exits -i -w -c -l '10 down' -W 0.4 -B 1 -H 24
+export BEMENU_OPTS="--binding vim --vim-esc-exits -i -w -c -l '10 down' -W 0.4 -B 1 -R 8 -H 24
 	--fn 'JetBrainsMonoNL Nerd Font Mono 11' --bdr '#ef934d'
-	--tb '#141514' --tf '#ef934d' --fb '#141514' --ff '#f4decd' --cb '#141514' --cf '#f4decd'
-	--nb '#141514' --nf '#f4decd' --ab '#141514' --af '#f4decd' --hb '#ef934d' --hf '#141514'"
+	--tb '#14151480' --tf '#ef934d' --fb '#14151480' --ff '#f4decd' --cb '#14151480' --cf '#f4decd'
+	--nb '#14151480' --nf '#f4decd' --ab '#14151480' --af '#f4decd' --hb '#ef934d' --hf '#141514'"
 
 # Start dwl on tty1 only.
 if [ -z "${WAYLAND_DISPLAY:-}" ] && [ "$(tty)" = /dev/tty1 ]; then

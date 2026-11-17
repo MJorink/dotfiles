@@ -8,7 +8,7 @@ dbus-update-activation-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
 # PipeWire: systemd user units start it (NixOS); Alpine needs the launcher
 [ -x /usr/libexec/pipewire-launcher ] && /usr/libexec/pipewire-launcher 2>/dev/null &
 fnott &
-# wbg "$HOME/.config/wallpaper.png" &
+wbg "$HOME/.config/wallpaper.jpg" &
 idle start &   # swayidle; pause/resume it from the session menu
 foot --server &
 wl-clip-persist --clipboard regular &
