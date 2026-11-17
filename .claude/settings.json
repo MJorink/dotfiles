@@ -10,7 +10,8 @@
     "csharp-lsp@claude-plugins-official": true,
     "ponytail@ponytail": true,
     "ecc@ecc": true,
-    "lua-lsp@claude-plugins-official": true
+    "lua-lsp@claude-plugins-official": true,
+    "clangd-lsp@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "ponytail": {
