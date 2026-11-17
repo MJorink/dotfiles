@@ -43,6 +43,7 @@ require('colorizer').setup({
 local map = vim.keymap.set
 map('n', '<leader>pv', vim.cmd.Explore, { desc = 'file browser' })
 map('n', '<leader>ff', function() require('fzf-lua').files() end, { desc = 'find file' })
+map('n', '<leader>fg', function() require('fzf-lua').live_grep() end, { desc = 'grep in files' })
 map('n', '<leader>lf', function() vim.lsp.buf.format() end, { desc = 'format file' })
 
 vim.lsp.config('clangd', {
