@@ -1,29 +1,17 @@
 {
-  "env": {
-    "USE_BUILTIN_RIPGREP": "0"
-  },
+  "theme": "dark",
   "attribution": {
     "commit": "",
     "pr": ""
   },
   "enabledPlugins": {
-    "csharp-lsp@claude-plugins-official": true,
-    "ponytail@ponytail": true,
-    "ecc@ecc": true,
-    "lua-lsp@claude-plugins-official": true,
-    "clangd-lsp@claude-plugins-official": true
+    "ponytail@ponytail": true
   },
   "extraKnownMarketplaces": {
     "ponytail": {
       "source": {
         "source": "github",
         "repo": "DietrichGebert/ponytail"
-      }
-    },
-    "ecc": {
-      "source": {
-        "source": "git",
-        "url": "https://github.com/affaan-m/ECC.git"
       }
     }
   },
@@ -33,12 +21,6 @@
         "ledger": true,
         "sendNames": true
       }
-    },
-    "ecc@ecc": {
-      "options": {
-        "hooks_enabled": true
-      }
     }
-  },
-  "theme": "dark"
+  }
 }
