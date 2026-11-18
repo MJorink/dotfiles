@@ -14,6 +14,7 @@ foot --server &
 wl-clip-persist --clipboard regular &
 wl-paste --watch cliphist store &
 
+battery-watch &        # warns when a battery is under 15%
 brightness restore &   # last level before reboot
 
 # Fill the status bar's volume field once PipeWire is up

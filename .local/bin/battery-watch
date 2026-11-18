@@ -1,0 +1,23 @@
+#!/bin/sh
+# battery-watch: every minute, on battery power, warns once for each battery
+# under 15% (again only after it was charged or AC was plugged in).
+# Started from dwl autostart.
+
+prev=
+while :; do
+	low=
+	if [ "$(cat /sys/class/power_supply/AC/online 2>/dev/null)" != 1 ]; then
+		for b in /sys/class/power_supply/BAT*; do
+			c=$(cat "$b/capacity" 2>/dev/null) || continue
+			[ "$c" -lt 15 ] || continue
+			n=${b##*/}
+			low="$low $n"
+			case "$prev " in
+			*" $n "*) ;;
+			*) notify-send -u critical "󰂃  $n low" "$c% left" ;;
+			esac
+		done
+	fi
+	prev=$low
+	sleep 60
+done

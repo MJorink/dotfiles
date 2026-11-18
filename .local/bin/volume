@@ -59,6 +59,12 @@ case $(wpctl get-volume "$source" 2>/dev/null) in
 *)       mic="mic on" ;;
 esac
 
+# Key presses: show the level in one notification that updates in place
+case $1 in up|down|mute)
+	id=$XDG_RUNTIME_DIR/osd-id
+	notify-send -u low -t 1500 -p -r "$(cat "$id" 2>/dev/null || echo 0)" -h int:value:$pct "$text" > "$id.tmp" && mv "$id.tmp" "$id" ;;
+esac
+
 write() { printf '%s\n' "$2" > "$XDG_RUNTIME_DIR/$1.tmp" && mv "$XDG_RUNTIME_DIR/$1.tmp" "$XDG_RUNTIME_DIR/$1"; }
 write volume "$text"
 write volume-info "${dev:-unknown output}, $mic"
