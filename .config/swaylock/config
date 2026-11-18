@@ -1,21 +1,26 @@
-# swaylock: plain lock screen in caelus colours
-color=0f0f0f
+# swaylock: macOS-style lock screen over the wallpaper, white ring,
+# blue when verifying, red when wrong
+image=~/.config/wallpaper.jpg
+scaling=fill
+color=1e1e1e
 ignore-empty-password
 show-failed-attempts
-font=JetBrainsMonoNL Nerd Font Mono
-inside-color=0f0f0f
-ring-color=1e1f1e
-key-hl-color=ef934d
-bs-hl-color=f16e65
+font=Inter Variable
+indicator-radius=56
+indicator-thickness=4
+inside-color=00000040
+ring-color=ffffff40
+key-hl-color=ffffff
+bs-hl-color=ff453a
 line-color=00000000
 separator-color=00000000
-text-color=f4decd
-inside-ver-color=0f0f0f
-ring-ver-color=ef934d
-text-ver-color=f4decd
-inside-wrong-color=0f0f0f
-ring-wrong-color=f16e65
-text-wrong-color=f16e65
-inside-clear-color=0f0f0f
-ring-clear-color=a69d8b
-text-clear-color=f4decd
+text-color=ffffff
+inside-ver-color=00000040
+ring-ver-color=0a84ff
+text-ver-color=ffffff
+inside-wrong-color=00000040
+ring-wrong-color=ff453a
+text-wrong-color=ffffff
+inside-clear-color=00000040
+ring-clear-color=ffffff80
+text-clear-color=ffffff

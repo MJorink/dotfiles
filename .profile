@@ -14,13 +14,14 @@ export LIBVA_DRIVER_NAME=iHD         # VA-API driver for the HD 620
 # Claude Code then keeps .claude.json inside ~/.claude: one directory holds all its state
 export CLAUDE_CONFIG_DIR="$HOME/.claude"
 
-# bemenu (app launcher and menu-* scripts): vim bindings, caelus colours
-# (translucent backgrounds show dwl's glass; -R 8 matches its corner_radius).
-# The menu-* scripts (menu-apps too) add --vim-normal-mode.
-export BEMENU_OPTS="--binding vim --vim-esc-exits -i -w -c -l '10 down' -W 0.4 -B 1 -R 8 -H 24
-	--fn 'JetBrainsMonoNL Nerd Font Mono 11' --bdr '#ef934d'
-	--tb '#14151420' --tf '#ef934d' --fb '#14151420' --ff '#f4decd' --cb '#14151480' --cf '#f4decd'
-	--nb '#14151420' --nf '#f4decd' --ab '#14151420' --af '#f4decd' --hb '#ef934d' --hf '#141514'"
+# bemenu (app launcher and menu-* scripts): vim bindings, Spotlight look: a
+# centred glass panel, Inter (SF Pro stand-in), the selection in macOS accent
+# blue, a hairline border (translucent backgrounds show dwl's glass; -R 12
+# matches its corner_radius). The menu-* scripts (menu-apps too) add --vim-normal-mode.
+export BEMENU_OPTS="--binding vim --vim-esc-exits -i -w -c -l '8 down' -W 0.45 -B 1 -R 12 -H 32
+	--fn 'Inter Variable 12' --bdr '#ffffff1a'
+	--tb '#1e1e1e20' --tf '#ffffff99' --fb '#1e1e1e20' --ff '#ffffff' --cb '#ffffff80' --cf '#ffffff'
+	--nb '#1e1e1e20' --nf '#ffffffd9' --ab '#1e1e1e20' --af '#ffffffd9' --hb '#0a84ff' --hf '#ffffff'"
 
 # Start dwl on tty1 only.
 if [ -z "${WAYLAND_DISPLAY:-}" ] && [ "$(tty)" = /dev/tty1 ]; then
