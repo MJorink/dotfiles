@@ -17,6 +17,7 @@ vim.o.sidescroll = 1
 vim.o.sidescrolloff = 5
 vim.o.termguicolors = true
 vim.o.showmode = false
+vim.o.hlsearch = false
 
 vim.cmd.colorscheme('caelus')
 
