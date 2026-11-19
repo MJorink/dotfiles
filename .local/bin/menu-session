@@ -17,7 +17,7 @@ case $choice in
 *Lock)    exec lock ;;
 *idle)    exec idle toggle ;;
 *Suspend) exec lock-suspend ;;
-*Log*)    exec pkill -TERM -x -u "$(id -u)" dwl ;;
+*Log*)    exec pkill -TERM -x -u "$(id -u)" glasswm ;;
 *Reboot)  power reboot ;;
 *Power*)  power poweroff ;;
 esac
