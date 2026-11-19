@@ -2,8 +2,6 @@
 PS1='\w \$ '
 set -o vi
 
-alias poweroff='doas poweroff'
-alias reboot='doas reboot'
 alias ..='cd ..'
 alias ls='ls -a'
 alias lg='lazygit'
