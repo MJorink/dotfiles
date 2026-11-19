@@ -4,7 +4,7 @@
 set -eu
 repo=$(cd "$(dirname "$0")" && pwd -P)
 cd "$repo"
-find . -path ./.git -prune -o -type f ! -name install.sh ! -name README.md -print | while read -r f; do
+find . -path ./.git -prune -o -type f ! -name install.sh ! -name README.md ! -name policies.json -print | while read -r f; do
 	f=${f#./}
 	dst="$HOME/$f"
 	[ "$(readlink "$dst" 2>/dev/null)" = "$repo/$f" ] && continue

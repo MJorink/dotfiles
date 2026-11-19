@@ -9,7 +9,8 @@ Configuration for the dwl desktop, usable with and without Nix.
   are linked into `$HOME` at boot. `.claude/` is linked to the checkout in
   `~/repos/dotfiles`, so Claude Code can still write its settings.
 - **Other systems**: `./install.sh` links every file into `$HOME` (existing files
-  are kept as `<name>.bak`).
+  are kept as `<name>.bak`). LibreWolf reads policies only system-wide: as root,
+  copy `.librewolf/policies.json` to `/etc/librewolf/policies/policies.json`.
 
 Scripts call `systemctl` when it exists (NixOS: logind, doas rules for
 `systemctl suspend|reboot|poweroff`), and the Alpine paths otherwise.

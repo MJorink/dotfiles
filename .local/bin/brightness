@@ -47,14 +47,5 @@ else
 	text="󰃠 $pct%"
 fi
 
-# Key presses: show the level in one notification that updates in place
-if [ "$1" = up ] || [ "$1" = down ]; then
-	id=$XDG_RUNTIME_DIR/osd-id
-	notify-send -u low -t 1500 -p -r "$(cat "$id" 2>/dev/null || echo 0)" -h int:value:$pct "$text" > "$id.tmp" && mv "$id.tmp" "$id"
-fi
-
-write() { printf '%s\n' "$2" > "$XDG_RUNTIME_DIR/$1.tmp" && mv "$XDG_RUNTIME_DIR/$1.tmp" "$XDG_RUNTIME_DIR/$1"; }
-write brightness "$text"
-write brightness-info "Backlight $dev, $cur of $max"
-pkill -USR1 -x slstatus
-exit 0
+case $1 in up|down) popup=1 ;; esac
+exec osd brightness "$text" "Backlight $dev, $cur of $max" "$pct" ${popup:+popup}
