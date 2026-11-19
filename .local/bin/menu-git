@@ -1,0 +1,5 @@
+#!/bin/sh
+# MOD+g: pick a repo in ~/repos, open lazygit in it.
+
+repo=$(ls ~/repos | bemenu --vim-normal-mode -p "git ") || exit 0
+exec footclient -T lazygit -D ~/repos/"$repo" lazygit
