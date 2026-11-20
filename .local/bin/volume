@@ -1,8 +1,8 @@
 #!/bin/sh
 # volume up|down|mute|micmute|refresh
 # Steps the volume in 5% increments with wpctl (38% -> up 40, down 35), then
-# writes "<icon> NN%" to $XDG_RUNTIME_DIR/volume and the bar tooltip
-# ("<output device>, mic on") to $XDG_RUNTIME_DIR/volume-info, and tells
+# writes the icon (macOS: no number in the menu bar) to $XDG_RUNTIME_DIR/volume and the tooltip
+# ("NN%, <output device>, mic on") to $XDG_RUNTIME_DIR/volume-info, and tells
 # slstatus to redraw now (SIGUSR1). refresh snaps an off-step level (set by a
 # mixer, or restored by WirePlumber at login) to the nearest 5%.
 
@@ -42,13 +42,13 @@ if [ -n "$t" ] && [ $t -ne $pct ]; then
 fi
 
 if [ "$muted" = "[MUTED]" ]; then
-	text="󰖁 mute"
+	text="󰖁"
 elif [ $pct -eq 0 ]; then
-	text="󰕿 0%"
+	text="󰕿"
 elif [ $pct -lt 50 ]; then
-	text="󰖀 $pct%"
+	text="󰖀"
 else
-	text="󰕾 $pct%"
+	text="󰕾"
 fi
 
 # Tooltip: output device name and microphone state
@@ -60,4 +60,4 @@ case $(wpctl get-volume "$source" 2>/dev/null) in
 esac
 
 case $1 in up|down|mute) popup=1 ;; esac
-exec osd volume "$text" "${dev:-unknown output}, $mic" "$pct" ${popup:+popup}
+exec osd volume "$text" "$pct%${muted:+ (muted)}, ${dev:-unknown output}, $mic" "$pct" ${popup:+popup}

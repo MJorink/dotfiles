@@ -5,7 +5,7 @@
 pick() { command -v "$1" >/dev/null 2>&1 && echo "$1" || echo "$2"; }
 
 choice=$(printf '%s\n' "󰖩  Wi-Fi" "󰕾  Audio" "󰂯  Bluetooth" "󰍹  Display" "󰄀  Screenshot" |
-	bemenu --vim-normal-mode -p "system ") || exit 0
+	bemenu --vim-normal-mode -p "Wi-Fi, Audio, Bluetooth, Display, Screenshot") || exit 0
 
 case $choice in
 *Wi-Fi)     exec footclient -T Wi-Fi "$(pick impala iwctl)" ;;

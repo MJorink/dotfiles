@@ -1,6 +1,6 @@
 #!/bin/sh
-# Run by dwl -s once the Wayland socket exists. dwl kills this process group
-# (so everything started here) when it exits.
+# Run by glasswm -s once the Wayland socket exists. glasswm kills this process group
+# (so everything started here) when it exits. glasswm draws the wallpaper itself.
 
 # D-Bus-activated services (xdg-desktop-portal for file pickers) need the Wayland socket
 dbus-update-activation-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
@@ -8,7 +8,6 @@ dbus-update-activation-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
 # PipeWire: systemd user units start it (NixOS); Alpine needs the launcher
 [ -x /usr/libexec/pipewire-launcher ] && /usr/libexec/pipewire-launcher 2>/dev/null &
 fnott &
-wbg "$HOME/.config/wallpaper.jpg" &
 idle start &   # swayidle; pause/resume it from the session menu
 foot --server &
 wl-clip-persist --clipboard regular &

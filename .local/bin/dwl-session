@@ -6,7 +6,7 @@
 export XDG_CURRENT_DESKTOP=glasswm
 export XDG_SESSION_TYPE=wayland
 export MOZ_ENABLE_WAYLAND=1
-# Keyboard layout for dwl (XKB_DEFAULT_LAYOUT, XKB_DEFAULT_VARIANT, ...):
+# Keyboard layout for glasswm (XKB_DEFAULT_LAYOUT, XKB_DEFAULT_VARIANT, ...):
 # export XKB_DEFAULT_LAYOUT=us
 
 cd "$HOME" || exit 1

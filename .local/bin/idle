@@ -2,7 +2,7 @@
 # swayidle with the session's timeouts: lock after 5 min, outputs off after
 # 10 min. "idle start" runs it (autostart.sh); "idle toggle" (session menu)
 # stops it to keep the screen on, or starts it again. A swayidle started by
-# toggle is outside dwl's startup process group, but it exits with dwl anyway
+# toggle is outside glasswm's startup process group, but it exits with glasswm anyway
 # when its Wayland connection closes.
 # With logind (NixOS) it also locks before every suspend, including lid close.
 

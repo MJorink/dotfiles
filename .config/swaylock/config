@@ -1,6 +1,7 @@
-# swaylock: macOS-style lock screen over the wallpaper, white ring,
+# swaylock: macOS-style lock screen over the blurred wallpaper (wallpaper-locked.jpg:
+# magick wallpaper.jpg -resize 480x270 -blur 0x6 -resize 1920x1080), white ring,
 # blue when verifying, red when wrong
-image=~/.config/wallpaper.jpg
+image=~/.config/wallpaper-locked.jpg
 scaling=fill
 color=1e1e1e
 ignore-empty-password

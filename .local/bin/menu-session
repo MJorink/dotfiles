@@ -11,7 +11,7 @@ power() {
 if idle status; then idle_item="󰅶  Pause idle"; else idle_item="󰾪  Resume idle"; fi
 
 choice=$(printf '%s\n' "  Lock" "$idle_item" "󰤄  Suspend" "󰍃  Log out" "󰜉  Reboot" "󰐥  Power off" |
-	bemenu --vim-normal-mode -p "session ") || exit 0
+	bemenu --vim-normal-mode -p "Lock, Suspend, Log Out, Power Off") || exit 0
 
 case $choice in
 *Lock)    exec lock ;;

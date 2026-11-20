@@ -2,7 +2,7 @@
 # External display (the first connected output that is not eDP-1: HDMI or
 # DP over USB-C): mirror / extend right / off, with wlr-randr only (no daemon).
 # Mirror puts it at eDP-1's position with the same logical size;
-# dwl's mirror patch then treats it as a copy of eDP-1.
+# glasswm then treats it as a copy of eDP-1 (mirror).
 
 int=eDP-1
 
@@ -13,7 +13,7 @@ ext=$(echo "$json" | jq -r --arg i "$int" 'first(.[] | select(.name != $i) | .na
 [ -n "$ext" ] || fail "No external display connected"
 
 choice=$(printf '%s\n' "󰍺  Mirror" "󰍹  Extend right" "󰶐  Off" |
-	bemenu --vim-normal-mode -p "$ext ") || exit 0
+	bemenu --vim-normal-mode -p "$ext") || exit 0
 
 # logical (scaled) size of eDP-1 and the current or preferred mode of a display
 lw=$(echo "$json" | jq -r --arg o "$int" '.[] | select(.name == $o) |

@@ -1,0 +1,9 @@
+[Desktop Entry]
+# Overrides foot's footclient.desktop: named like macOS' Terminal in Spotlight,
+# the menu bar and the dock
+Type=Application
+Name=Terminal
+Exec=footclient
+Icon=foot
+Terminal=false
+Categories=System;TerminalEmulator;

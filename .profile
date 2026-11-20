@@ -14,16 +14,16 @@ export LIBVA_DRIVER_NAME=iHD         # VA-API driver for the HD 620
 # Claude Code then keeps .claude.json inside ~/.claude: one directory holds all its state
 export CLAUDE_CONFIG_DIR="$HOME/.claude"
 
-# bemenu (app launcher and menu-* scripts): vim bindings, Spotlight look: a
-# centred glass panel, Inter (SF Pro stand-in), the selection in macOS accent
-# blue, a hairline border (translucent backgrounds show dwl's glass; -R 12
-# matches its corner_radius). The menu-* scripts (menu-apps too) add --vim-normal-mode.
+# bemenu (app launcher and menu-* scripts): vim bindings and 8 lines. The
+# packages repo's bemenu draws the Spotlight look itself (size, corners,
+# colours) and ignores the look options below; they style a stock bemenu
+# (non-Nix systems) in the same macOS colours. The menu-* scripts add --vim-normal-mode.
 export BEMENU_OPTS="--binding vim --vim-esc-exits -i -w -c -l '8 down' -W 0.45 -B 1 -R 12 -H 32
 	--fn 'Inter Variable 12' --bdr '#ffffff1a'
 	--tb '#1e1e1e20' --tf '#ffffff99' --fb '#1e1e1e20' --ff '#ffffff' --cb '#ffffff80' --cf '#ffffff'
 	--nb '#1e1e1e20' --nf '#ffffffd9' --ab '#1e1e1e20' --af '#ffffffd9' --hb '#0a84ff' --hf '#ffffff'"
 
-# Start dwl on tty1 only.
+# Start the glasswm session on tty1 only.
 if [ -z "${WAYLAND_DISPLAY:-}" ] && [ "$(tty)" = /dev/tty1 ]; then
 	# logind (NixOS) sets XDG_RUNTIME_DIR; without it (Alpine) make one in /tmp
 	if [ -z "${XDG_RUNTIME_DIR:-}" ]; then
@@ -34,7 +34,7 @@ if [ -z "${WAYLAND_DISPLAY:-}" ] && [ "$(tty)" = /dev/tty1 ]; then
 			chmod 0700 "$dir"
 			export XDG_RUNTIME_DIR="$dir"
 		else
-			echo "Not starting dwl: $dir is not a directory owned by you." >&2
+			echo "Not starting glasswm: $dir is not a directory owned by you." >&2
 		fi
 	fi
 	if [ -n "${XDG_RUNTIME_DIR:-}" ]; then

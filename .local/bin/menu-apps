@@ -38,7 +38,7 @@ apps=$(awk '
 ' "$@")
 
 choice=$(printf '%s\n' "$apps" | cut -f1 | sort -fu |
-	bemenu --vim-normal-mode -p " ") || exit 0
+	bemenu --vim-normal-mode) || exit 0
 
 line=$(printf '%s\n' "$apps" | awk -F '\t' -v n="$choice" '$1 == n { print; exit }')
 [ -n "$line" ] || exit 0

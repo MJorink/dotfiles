@@ -1,7 +1,7 @@
 #!/bin/sh
 # battery-watch: every minute, on battery power, warns once for each battery
 # under 15% (again only after it was charged or AC was plugged in).
-# Started from dwl autostart.
+# Started from the session autostart (~/.config/dwl/autostart.sh).
 
 prev=
 while :; do

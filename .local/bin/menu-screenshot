@@ -2,7 +2,7 @@
 # Screenshot of a region, the focused window or all outputs: a menu from the
 # system menu (MOD+s), or straight to region selection with `region` (MOD+SHIFT+s).
 # Copies it to the clipboard and saves /tmp/screenshots/YYYY-MM-DD_HH-MM-SS.png.
-# DWL_FOCUSED_GEOM is set by dwl when it spawns the menu (focusgeom patch).
+# DWL_FOCUSED_GEOM is set by glasswm when it spawns the menu.
 
 dir=/tmp/screenshots
 fail() { notify-send -u critical "Screenshot" "$*"; exit 1; }
@@ -11,7 +11,7 @@ if [ "${1:-}" = region ]; then
 	choice=Region
 else
 	choice=$(printf '%s\n' "󰩭  Region" "󰖯  Window" "󰍹  Full screen" |
-		bemenu --vim-normal-mode -p "screenshot ") || exit 0
+		bemenu --vim-normal-mode -p "Screenshot") || exit 0
 fi
 
 case $choice in
