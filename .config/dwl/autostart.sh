@@ -4,6 +4,11 @@
 
 # D-Bus-activated services (xdg-desktop-portal for file pickers) need the Wayland socket
 dbus-update-activation-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
+# NixOS: the portal also needs graphical-session.target, which glasswm-session.target binds
+if command -v systemctl >/dev/null; then
+	systemctl --user start glasswm-session.target
+	trap 'systemctl --user stop glasswm-session.target' EXIT TERM
+fi
 
 # PipeWire: systemd user units start it (NixOS); Alpine needs the launcher
 [ -x /usr/libexec/pipewire-launcher ] && /usr/libexec/pipewire-launcher 2>/dev/null &
