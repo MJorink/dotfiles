@@ -6,3 +6,5 @@
 	helper = store --file ~/.local/state/git-credentials
 [init]
 	defaultBranch = main
+[fetch]
+	prune = true
