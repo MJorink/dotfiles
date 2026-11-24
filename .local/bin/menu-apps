@@ -37,6 +37,7 @@ apps=$(awk '
 	END { flush() }
 ' "$@")
 
+pkill -x bemenu # one menu at a time: close any other
 choice=$(printf '%s\n' "$apps" | cut -f1 | sort -fu |
 	bemenu --vim-normal-mode) || exit 0
 

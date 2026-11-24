@@ -1,5 +1,6 @@
 #!/bin/sh
 # MOD+v: pick an entry from the clipboard history and copy it again.
+pkill -x bemenu # one menu at a time: close any other
 sel=$(cliphist list | bemenu --vim-normal-mode -p "Clipboard History") || exit 0
 [ -n "$sel" ] || exit 0
 printf '%s\n' "$sel" | cliphist decode | wl-copy

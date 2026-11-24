@@ -12,6 +12,7 @@ json=$(wlr-randr --json) || fail "wlr-randr failed"
 ext=$(echo "$json" | jq -r --arg i "$int" 'first(.[] | select(.name != $i) | .name) // empty')
 [ -n "$ext" ] || fail "No external display connected"
 
+pkill -x bemenu # one menu at a time: close any other
 choice=$(printf '%s\n' "󰍺  Mirror" "󰍹  Extend right" "󰶐  Off" |
 	bemenu --vim-normal-mode -p "$ext") || exit 0
 

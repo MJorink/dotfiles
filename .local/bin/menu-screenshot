@@ -10,6 +10,7 @@ fail() { notify-send -u critical "Screenshot" "$*"; exit 1; }
 if [ "${1:-}" = region ]; then
 	choice=Region
 else
+	pkill -x bemenu # one menu at a time: close any other
 	choice=$(printf '%s\n' "󰩭  Region" "󰖯  Window" "󰍹  Full screen" |
 		bemenu --vim-normal-mode -p "Screenshot") || exit 0
 fi

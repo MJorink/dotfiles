@@ -1,5 +1,6 @@
 #!/bin/sh
 # MOD+g: pick a repo in ~/repos, open lazygit in it.
 
+pkill -x bemenu # one menu at a time: close any other
 repo=$(ls ~/repos | bemenu --vim-normal-mode -p "Repositories") || exit 0
 exec footclient -T lazygit -D ~/repos/"$repo" lazygit
