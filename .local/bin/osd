@@ -8,7 +8,7 @@ name=$1 text=$2 info=$3 pct=$4
 
 if [ "$5" = popup ]; then
 	id=$XDG_RUNTIME_DIR/osd-id
-	notify-send -u low -t 1500 -p -r "$(cat "$id" 2>/dev/null || echo 0)" -h int:value:$pct "$text" > "$id.tmp" && mv "$id.tmp" "$id"
+	notify-send -u low -t 1500 -p -r "$(cat "$id" 2>/dev/null || echo 0)" -h int:value:$pct "$text  $pct%" > "$id.tmp" && mv "$id.tmp" "$id"
 fi
 
 write() { printf '%s\n' "$2" > "$XDG_RUNTIME_DIR/$1.tmp" && mv "$XDG_RUNTIME_DIR/$1.tmp" "$XDG_RUNTIME_DIR/$1"; }
