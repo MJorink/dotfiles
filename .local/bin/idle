@@ -4,13 +4,13 @@
 # stops it to keep the screen on, or starts it again. A swayidle started by
 # toggle is outside glasswm's startup process group, but it exits with glasswm anyway
 # when its Wayland connection closes.
-# With logind (NixOS) it also locks before every suspend, including lid close.
+# It also locks before every suspend (logind), including lid close.
 
 start() {
-	command -v systemctl >/dev/null && set -- before-sleep lock
 	exec swayidle -w \
 		timeout 300 'lock' \
-		timeout 600 'wlopm --off "*"' resume 'wlopm --on "*"' "$@"
+		timeout 600 'wlopm --off "*"' resume 'wlopm --on "*"' \
+		before-sleep lock
 }
 
 case $1 in

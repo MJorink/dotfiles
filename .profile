@@ -1,6 +1,5 @@
-# ~/.profile: login shells (BusyBox ash on Alpine, bash on NixOS)
+# ~/.profile: login shells
 
-export ENV="$HOME/.ashrc"            # interactive ash reads ~/.ashrc (bash: ~/.bashrc)
 # History lives in a kept directory, not $HOME: on NixOS $HOME is wiped at boot
 # and only listed directories survive (bash also saves history by rename).
 export HISTFILE="${XDG_STATE_HOME:-$HOME/.local/state}/sh_history"
@@ -25,21 +24,6 @@ export BEMENU_OPTS="--binding vim --vim-esc-exits -i -w -c -l '8 down' -W 0.45 -
 
 # Start the glasswm session on tty1 only.
 if [ -z "${WAYLAND_DISPLAY:-}" ] && [ "$(tty)" = /dev/tty1 ]; then
-	# logind (NixOS) sets XDG_RUNTIME_DIR; without it (Alpine) make one in /tmp
-	if [ -z "${XDG_RUNTIME_DIR:-}" ]; then
-		dir="/tmp/$(id -u)-runtime"
-		mkdir -m 0700 "$dir" 2>/dev/null
-		# /tmp is shared: refuse a symlink or a directory someone else made
-		if [ -d "$dir" ] && [ ! -L "$dir" ] && [ "$(stat -c %u "$dir")" = "$(id -u)" ]; then
-			chmod 0700 "$dir"
-			export XDG_RUNTIME_DIR="$dir"
-		else
-			echo "Not starting glasswm: $dir is not a directory owned by you." >&2
-		fi
-	fi
-	if [ -n "${XDG_RUNTIME_DIR:-}" ]; then
-		# systemd's user bus already runs (NixOS); otherwise start a session bus
-		[ -S "$XDG_RUNTIME_DIR/bus" ] && exec "$HOME/.local/bin/dwl-session"
-		exec dbus-run-session -- "$HOME/.local/bin/dwl-session"
-	fi
+	# logind sets XDG_RUNTIME_DIR; systemd's user bus is the session bus
+	exec "$HOME/.local/bin/dwl-session"
 fi

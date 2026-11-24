@@ -1,5 +1,5 @@
 #!/bin/sh
-# Started by ~/.profile on tty1 inside dbus-run-session, with XDG_RUNTIME_DIR set.
+# Started by ~/.profile on tty1 (logind has set XDG_RUNTIME_DIR).
 # slstatus writes the status text to glasswm's stdin (bar patch). It runs in
 # $XDG_RUNTIME_DIR so its "cat volume" component reads $XDG_RUNTIME_DIR/volume.
 

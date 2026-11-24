@@ -1,12 +1,7 @@
 #!/bin/sh
 # MOD+p: session menu. Reboot, power off and suspend use doas rules without a
-# password (NixOS: systemctl reboot/poweroff/suspend; Alpine: /sbin/reboot,
-# /sbin/poweroff). "Pause idle" stops the auto-lock and screen-off (swayidle).
-
-power() {
-	if command -v systemctl >/dev/null; then exec doas -n systemctl "$1"; fi
-	exec doas -n "/sbin/$1"
-}
+# password (systemctl reboot/poweroff/suspend). "Pause idle" stops the
+# auto-lock and screen-off (swayidle).
 
 if idle status; then idle_item="󰅶  Pause idle"; else idle_item="󰾪  Resume idle"; fi
 
@@ -18,6 +13,6 @@ case $choice in
 *idle)    exec idle toggle ;;
 *Suspend) exec lock-suspend ;;
 *Log*)    exec pkill -TERM -x -u "$(id -u)" glasswm ;;
-*Reboot)  power reboot ;;
-*Power*)  power poweroff ;;
+*Reboot)  exec doas -n systemctl reboot ;;
+*Power*)  exec doas -n systemctl poweroff ;;
 esac

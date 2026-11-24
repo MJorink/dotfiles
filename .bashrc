@@ -1,2 +1,8 @@
-# ~/.bashrc: interactive bash (NixOS login shell) uses the same setup as ash
-. "$HOME/.ashrc"
+# ~/.bashrc: interactive bash
+PS1='\w \$ '
+set -o vi
+
+alias ..='cd ..'
+alias ls='ls -a'
+alias lg='lazygit'
+alias vim='nvim'
