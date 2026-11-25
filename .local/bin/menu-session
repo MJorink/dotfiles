@@ -6,7 +6,7 @@
 if idle status; then idle_item="󰅶  Pause idle"; else idle_item="󰾪  Resume idle"; fi
 
 pkill -x bemenu # one menu at a time: close any other
-choice=$(printf '%s\n' "  Lock" "$idle_item" "󰤄  Suspend" "󰍃  Log out" "󰜉  Reboot" "󰐥  Power off" |
+choice=$(printf '%s\n' "󰌾  Lock" "$idle_item" "󰤄  Suspend" "󰍃  Log out" "󰜉  Reboot" "󰐥  Power off" |
 	bemenu --vim-normal-mode -p "Lock, Suspend, Log Out, Power Off") || exit 0
 
 case $choice in
