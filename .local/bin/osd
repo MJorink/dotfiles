@@ -10,10 +10,14 @@ if [ "$5" = popup ]; then
 	id=$XDG_RUNTIME_DIR/osd-id
 	# volume's text is icon-only, brightness's already ends in the percentage
 	case $text in *%) summary=$text ;; *) summary="$text  $pct%" ;; esac
-	notify-send -u low -t 1500 -p -r "$(cat "$id" 2>/dev/null || echo 0)" -h int:value:$pct "$summary" > "$id.tmp" && mv "$id.tmp" "$id"
+	# key repeat runs several at once: per-process tmp files, and never store an
+	# empty id (notify-send -r "" fails, which hid every popup until reboot)
+	r=$(cat "$id" 2>/dev/null)
+	notify-send -u low -t 1500 -p -r "${r:-0}" -h int:value:$pct "$summary" > "$id.$$" && [ -s "$id.$$" ] && mv "$id.$$" "$id"
+	rm -f "$id.$$"
 fi
 
-write() { printf '%s\n' "$2" > "$XDG_RUNTIME_DIR/$1.tmp" && mv "$XDG_RUNTIME_DIR/$1.tmp" "$XDG_RUNTIME_DIR/$1"; }
+write() { printf '%s\n' "$2" > "$XDG_RUNTIME_DIR/$1.$$" && mv "$XDG_RUNTIME_DIR/$1.$$" "$XDG_RUNTIME_DIR/$1"; }
 write "$name" "$text"
 write "$name-info" "$info"
 pkill -USR1 -x slstatus
